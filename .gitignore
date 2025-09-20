@@ -4,6 +4,12 @@
 /node_modules
 /.pnp
 .pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # testing
 /coverage
@@ -11,26 +17,46 @@
 # next.js
 /.next/
 /out/
+.next-env.d.ts
 
-# production
+# build / tooling
 /build
+dist
+.turbo
+.vercel
+.eslintcache
+.stylelintcache
 
-# misc
+# OS / editors
 .DS_Store
-*.pem
+Thumbs.db
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
-# debug
+# debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+logs
+*.log
+*.log.*
 
-# local env files
-.env*.local
+# env files (keep secrets out of git)
 .env
-
-# vercel
-.vercel
+.env*.local
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# misc
+*.pem
