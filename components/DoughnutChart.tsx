@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
