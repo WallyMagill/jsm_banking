@@ -194,7 +194,17 @@ export const getTransactionStatus = (date: Date) => {
 };
 
 // AUTH FORM SCHEMA
-export const authFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+export const authFormSchema = (type: string) => z.object({
+  // BOTH
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
+  // SIGN UP
+  firstName: type === 'sign-in' ? z.string().optional() : z.string().min(2, 'First name must be at least 2 characters'),
+  lastName: type === 'sign-in' ? z.string().optional() : z.string().min(2, 'Last name must be at least 2 characters'),
+  address1: type === 'sign-in' ? z.string().optional() : z.string().min(5, 'Address must be at least 5 characters').max(50, 'Address can not be more than 50 characters'),
+  city: type === 'sign-in' ? z.string().optional() : z.string().min(5, 'City must be at least 2 characters').max(50, 'City can not be more than 50 characters'),
+  state: type === 'sign-in' ? z.string().optional() : z.string().min(2, 'State must be at least 2 characters').max(2, 'State must be 2 characters'),
+  postalCode: type === 'sign-in' ? z.string().optional() : z.string().regex(/^\d{5}(-\d{4})?$/, 'Please enter a valid postal code (e.g., 12345 or 12345-6789)'),
+  dateOfBirth: type === 'sign-in' ? z.string().optional() : z.string().regex(/^\d{2}\/\d{2}\/\d{4}$/, 'Please enter date in MM/DD/YYYY format'),
+  ssn: type === 'sign-in' ? z.string().optional() : z.string().regex(/^\d{4}$/, 'SSN must be exactly 4 digits'),
 });
