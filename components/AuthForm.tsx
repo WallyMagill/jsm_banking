@@ -19,6 +19,7 @@ import { Form } from '@/components/ui/form';
 // Custom components and utilities
 import CustomInput from './CustomInput';
 import { authFormSchema } from '@/lib/utils';
+import { signIn, signUp } from '@/lib/actions/user.actions';
 
 interface AuthFormProps {
   type: string;
@@ -28,6 +29,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Initialize form schema and validation
   const formSchema = authFormSchema(type);
@@ -50,23 +52,32 @@ const AuthForm = ({ type }: AuthFormProps) => {
   // Handle form submission
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
+    setError(null);
     
     try {
       // Sign up with Appwrite & create plaid token
       if (type === 'sign-up') {
-        // const newUser = await signUp(data);
-        // setUser(newUser);
+        const newUser = await signUp(data);
+        setUser(newUser);
       }
 
       if (type === 'sign-in') {
-        // const response = await signIn(data)({
-        //   email: data.email,
-        //   password: data.password,
-        // })
-        // if(response) router.push('/');
+        const response = await signIn({
+          email: data.email,
+          password: data.password,
+        })
+        console.log('Sign-in response:', response);
+        if(response) {
+          console.log('Redirecting to home page...');
+          router.push('/');
+        } else {
+          console.log('Sign-in failed, no redirect');
+          setError('Invalid email or password. Please try again.');
+        }
       }
     } catch (error) {
       console.log(error);
+      setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -205,6 +216,13 @@ const AuthForm = ({ type }: AuthFormProps) => {
                 placeholder="Enter your password"
                 type="password"
               />
+
+              {/* Error message */}
+              {error && (
+                <div className="text-red-500 text-sm text-center">
+                  {error}
+                </div>
+              )}
 
               {/* Submit button */}
               <div className="flex flex-col gap-4">

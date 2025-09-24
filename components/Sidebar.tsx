@@ -11,6 +11,7 @@ import { usePathname } from 'next/navigation';
 // Constants and utilities
 import { sidebarLinks } from '@/constants';
 import { cn } from '@/lib/utils';
+import Footer from './Footer';
 
 interface SidebarProps {
   user: any; // TODO: Define proper user type
@@ -69,8 +70,8 @@ const Sidebar = ({ user }: SidebarProps) => {
 
         {/* TODO: USER */}
       </nav>
-
-      {/* TODO: FOOTER */}
+      
+      <Footer user={user} /> 
     </section>
   );
 };

@@ -9,12 +9,17 @@ import Link from 'next/link';
 import BankCard from './BankCard';
 
 interface RightSidebarProps {
-  user: any; // TODO: Define proper user type
+  user: any | null; // TODO: Define proper user type
   transactions: any; // TODO: Define proper transactions type
   banks: any[]; // TODO: Define proper banks type
 }
 
 const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
+  // Don't render if user is null
+  if (!user) {
+    return null;
+  }
+
   return (
     <aside className="right-sidebar">
       {/* User profile section */}
@@ -23,16 +28,16 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
         <div className="profile">
           <div className="profile-img">
             <span className="text-5xl font-bold text-blue-500">
-              {user.firstName[0]}
+              {user.name?.[0] || 'U'}
             </span>
           </div>
 
           <div className="profile-details">
             <h1 className="profile-name">
-              {user.firstName} {user.lastName}
+              {user.name || 'User'}
             </h1>
             <p className="profile-email">
-              {user.email}
+              {user.email || 'No email'}
             </p>
           </div>
         </div>
@@ -64,7 +69,7 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
               <BankCard
                 key={banks[0].$id}
                 account={banks[0]}
-                userName={`${user.firstName} ${user.lastName}`}
+                userName={user.name}
                 showBalance={false}
               />
             </div>
@@ -73,7 +78,7 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
                 <BankCard
                   key={banks[1].$id}
                   account={banks[1]}
-                  userName={`${user.firstName} ${user.lastName}`}
+                  userName={user.name}
                   showBalance={false}
                 />
               </div>

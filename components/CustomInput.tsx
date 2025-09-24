@@ -52,6 +52,7 @@ const CustomInput = ({
                 className={className}
                 type={type}
                 {...field}
+                value={field.value || ''}
               />
             </FormControl>
             <FormMessage className="form-message mt-2" />

@@ -22,6 +22,7 @@ import {
 // Constants and utilities
 import { sidebarLinks } from '@/constants';
 import { cn } from '@/lib/utils';
+import Footer from './Footer';
 
 interface MobileNavProps {
   user: any; // TODO: Define proper user type
@@ -100,7 +101,7 @@ const MobileNav = ({ user }: MobileNavProps) => {
               </nav>
             </SheetClose>
 
-            {/* TODO: FOOTER */}
+            <Footer user={user} type='mobile' />
           </div>
         </SheetContent>
       </Sheet>
