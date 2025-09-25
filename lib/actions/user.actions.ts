@@ -6,10 +6,16 @@ import { cookies } from 'next/headers';
 
 // Internal imports
 import { createSessionClient, createAdminClient } from '../appwrite';
-import { parseStringify } from '../utils';
+import { extractCustomerIdFromUrl, parseStringify } from '../utils';
 import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from 'plaid';
 import { plaidClient } from '../plaid';
-import { addFundingSource } from './dwolla.actions';
+import { addFundingSource, createDwollaCustomer } from './dwolla.actions';
+
+const {
+  APPWRITE_DATABASE_ID: DATABASE_ID,
+  APPWRITE_USER_COLLECTION_ID: USER_COLLECTION_ID,
+  APPWRITE_BANK_COLLECTION_ID: BANK_COLLECTION_ID,
+} = process.env;
 
 /**
  * Authenticates a user with email and password
@@ -45,16 +51,41 @@ export const signIn = async ({ email, password }: signInProps) => {
 export const signUp = async (userData: SignUpParams) => {
   const { email, password, firstName, lastName } = userData;
   
-  try {
-    const { account } = await createAdminClient();
+  let newUserAccount;
 
-    const newUserAccount = await account.create(
+  try {
+    const { account, database } = await createAdminClient();
+
+    newUserAccount = await account.create(
       ID.unique(),
       email,
       password,
       `${firstName} ${lastName}`,
     );
+
+    if(!newUserAccount) throw new Error('Error creating user')
+
+    const dwollaCustomerUrl = await createDwollaCustomer({
+      ...userData,
+      type: 'personal'
+    })
     
+    if(!dwollaCustomerUrl) throw new Error('Error creating Dwolla customer')
+
+    const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl)
+
+    const newUser = await database.createDocument(
+      DATABASE_ID!,
+      USER_COLLECTION_ID!,
+      ID.unique(),
+      {
+        ...userData,
+        userId: newUserAccount.$id,
+        dwollaCustomerId,
+        dwollaCustomerUrl,
+      }
+    )
+
     const session = await account.createEmailPasswordSession({
       email,
       password
@@ -67,7 +98,7 @@ export const signUp = async (userData: SignUpParams) => {
       secure: true,
     });
 
-    return parseStringify(newUserAccount);
+    return parseStringify(newUser);
   } catch (error) {
     console.log('Error', error);
   }
