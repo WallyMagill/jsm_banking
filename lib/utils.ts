@@ -1,13 +1,29 @@
+// External library imports
 import { type ClassValue, clsx } from 'clsx';
 import qs from 'query-string';
 import { twMerge } from 'tailwind-merge';
 import { z } from 'zod';
 
+// ========================================
+// Utility Functions
+// ========================================
+
+/**
+ * Combines class names using clsx and tailwind-merge for optimal class handling
+ */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// FORMAT DATE TIME
+// ========================================
+// Date & Time Formatting
+// ========================================
+
+/**
+ * Formats a date string into various readable formats
+ * @param dateString - The date to format
+ * @returns Object containing different formatted date strings
+ */
 export const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     weekday: 'short', // abbreviated weekday name (e.g., 'Mon')
@@ -65,6 +81,11 @@ export const formatDateTime = (dateString: Date) => {
   };
 };
 
+/**
+ * Formats a number as currency in USD
+ * @param amount - The amount to format
+ * @returns Formatted currency string
+ */
 export function formatAmount(amount: number): string {
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -75,11 +96,25 @@ export function formatAmount(amount: number): string {
   return formatter.format(amount);
 }
 
+/**
+ * Deep clones an object by parsing and stringifying JSON
+ * @param value - The value to clone
+ * @returns Deep cloned object
+ */
 export const parseStringify = (value: unknown) => JSON.parse(JSON.stringify(value));
 
+/**
+ * Removes special characters from a string, keeping only word characters and spaces
+ * @param value - The string to clean
+ * @returns String with special characters removed
+ */
 export const removeSpecialCharacters = (value: string) => {
   return value.replace(/[^\w\s]/gi, '');
 };
+
+// ========================================
+// URL & Query Utilities
+// ========================================
 
 interface UrlQueryParams {
   params: string;
@@ -87,6 +122,13 @@ interface UrlQueryParams {
   value: string;
 }
 
+/**
+ * Updates URL query parameters
+ * @param params - Current URL parameters
+ * @param key - Query parameter key
+ * @param value - Query parameter value
+ * @returns Updated URL string
+ */
 export function formUrlQuery({ params, key, value }: UrlQueryParams) {
   const currentUrl = qs.parse(params);
 
@@ -101,6 +143,15 @@ export function formUrlQuery({ params, key, value }: UrlQueryParams) {
   );
 }
 
+// ========================================
+// Banking & Account Utilities
+// ========================================
+
+/**
+ * Returns color scheme for different account types
+ * @param type - The account type
+ * @returns Object containing color classes for the account type
+ */
 export function getAccountTypeColors(type: AccountTypes) {
   switch (type) {
     case 'depository':
@@ -129,6 +180,11 @@ export function getAccountTypeColors(type: AccountTypes) {
   }
 }
 
+/**
+ * Counts and aggregates transaction categories
+ * @param transactions - Array of transactions to analyze
+ * @returns Sorted array of category counts
+ */
 export function countTransactionCategories(
   transactions: Transaction[]
 ): CategoryCount[] {
@@ -137,20 +193,20 @@ export function countTransactionCategories(
 
   // Iterate over each transaction
   transactions?.forEach((transaction) => {
-      // Extract the category from the transaction
-      const category = transaction.category;
+    // Extract the category from the transaction
+    const category = transaction.category;
 
-      // If the category exists in the categoryCounts object, increment its count
-      if (categoryCounts.hasOwnProperty(category)) {
-        categoryCounts[category]++;
-      } else {
-        // Otherwise, initialize the count to 1
-        categoryCounts[category] = 1;
-      }
+    // If the category exists in the categoryCounts object, increment its count
+    if (categoryCounts.hasOwnProperty(category)) {
+      categoryCounts[category]++;
+    } else {
+      // Otherwise, initialize the count to 1
+      categoryCounts[category] = 1;
+    }
 
-      // Increment total count
-      totalCount++;
-    });
+    // Increment total count
+    totalCount++;
+  });
 
   // Convert the categoryCounts object to an array of objects
   const aggregatedCategories: CategoryCount[] = Object.keys(categoryCounts).map(
@@ -167,6 +223,11 @@ export function countTransactionCategories(
   return aggregatedCategories;
 }
 
+/**
+ * Extracts customer ID from a URL string
+ * @param url - The URL to extract from
+ * @returns Customer ID string
+ */
 export function extractCustomerIdFromUrl(url: string) {
   // Split the URL string by '/'
   const parts = url.split('/');
@@ -177,14 +238,29 @@ export function extractCustomerIdFromUrl(url: string) {
   return customerId;
 }
 
+/**
+ * Encrypts an ID using base64 encoding
+ * @param id - The ID to encrypt
+ * @returns Base64 encoded string
+ */
 export function encryptId(id: string) {
   return btoa(id);
 }
 
+/**
+ * Decrypts an ID using base64 decoding
+ * @param id - The base64 encoded ID to decrypt
+ * @returns Decoded string
+ */
 export function decryptId(id: string) {
   return atob(id);
 }
 
+/**
+ * Determines transaction status based on date
+ * @param date - The transaction date
+ * @returns 'Processing' if within 2 days, 'Success' otherwise
+ */
 export const getTransactionStatus = (date: Date) => {
   const today = new Date();
   const twoDaysAgo = new Date(today);
@@ -193,18 +269,43 @@ export const getTransactionStatus = (date: Date) => {
   return date > twoDaysAgo ? 'Processing' : 'Success';
 };
 
-// AUTH FORM SCHEMA
+// ========================================
+// Form Validation Schemas
+// ========================================
+
+/**
+ * Creates a Zod schema for authentication forms based on type
+ * @param type - The form type ('sign-in' or 'sign-up')
+ * @returns Zod schema object
+ */
 export const authFormSchema = (type: string) => z.object({
-  // BOTH
+  // Common fields for both sign-in and sign-up
   email: z.string().email('Please enter a valid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters long'),
-  // SIGN UP
-  firstName: type === 'sign-in' ? z.string().optional() : z.string().min(2, 'First name must be at least 2 characters'),
-  lastName: type === 'sign-in' ? z.string().optional() : z.string().min(2, 'Last name must be at least 2 characters'),
-  address1: type === 'sign-in' ? z.string().optional() : z.string().min(5, 'Address must be at least 5 characters').max(50, 'Address can not be more than 50 characters'),
-  city: type === 'sign-in' ? z.string().optional() : z.string().min(5, 'City must be at least 2 characters').max(50, 'City can not be more than 50 characters'),
-  state: type === 'sign-in' ? z.string().optional() : z.string().min(2, 'State must be at least 2 characters').max(2, 'State must be 2 characters'),
-  postalCode: type === 'sign-in' ? z.string().optional() : z.string().regex(/^\d{5}(-\d{4})?$/, 'Please enter a valid postal code (e.g., 12345 or 12345-6789)'),
-  dateOfBirth: type === 'sign-in' ? z.string().optional() : z.string().regex(/^\d{2}\/\d{2}\/\d{4}$/, 'Please enter date in MM/DD/YYYY format'),
-  ssn: type === 'sign-in' ? z.string().optional() : z.string().regex(/^\d{4}$/, 'SSN must be exactly 4 digits'),
+  
+  // Sign-up specific fields (optional for sign-in)
+  firstName: type === 'sign-in' 
+    ? z.string().optional() 
+    : z.string().min(2, 'First name must be at least 2 characters'),
+  lastName: type === 'sign-in' 
+    ? z.string().optional() 
+    : z.string().min(2, 'Last name must be at least 2 characters'),
+  address1: type === 'sign-in' 
+    ? z.string().optional() 
+    : z.string().min(5, 'Address must be at least 5 characters').max(50, 'Address can not be more than 50 characters'),
+  city: type === 'sign-in' 
+    ? z.string().optional() 
+    : z.string().min(5, 'City must be at least 2 characters').max(50, 'City can not be more than 50 characters'),
+  state: type === 'sign-in' 
+    ? z.string().optional() 
+    : z.string().min(2, 'State must be at least 2 characters').max(2, 'State must be 2 characters'),
+  postalCode: type === 'sign-in' 
+    ? z.string().optional() 
+    : z.string().regex(/^\d{5}(-\d{4})?$/, 'Please enter a valid postal code (e.g., 12345 or 12345-6789)'),
+  dateOfBirth: type === 'sign-in' 
+    ? z.string().optional() 
+    : z.string().regex(/^\d{2}\/\d{2}\/\d{4}$/, 'Please enter date in MM/DD/YYYY format'),
+  ssn: type === 'sign-in' 
+    ? z.string().optional() 
+    : z.string().regex(/^\d{4}$/, 'SSN must be exactly 4 digits'),
 });

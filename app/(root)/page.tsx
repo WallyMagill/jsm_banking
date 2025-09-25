@@ -5,8 +5,14 @@ import React from 'react';
 import HeaderBox from '@/components/HeaderBox';
 import TotalBalanceBox from '@/components/TotalBalanceBox';
 import RightSidebar from '@/components/RightSidebar';
+
+// Actions
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 
+/**
+ * Home page component displaying user dashboard with account overview
+ * Shows welcome message, total balance, and user profile sidebar
+ */
 const Home = async () => {
   const loggedIn = await getLoggedInUser();
 
@@ -29,7 +35,7 @@ const Home = async () => {
           />
         </header>
 
-        {/* TODO: RECENT TRANSACTIONS */}
+        {/* TODO: Add recent transactions component */}
       </div>
 
       {/* Right sidebar with user profile and banks */}

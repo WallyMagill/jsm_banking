@@ -9,12 +9,20 @@ import Link from 'next/link';
 import BankCard from './BankCard';
 
 interface RightSidebarProps {
-  user: any | null; // TODO: Define proper user type
-  transactions: any; // TODO: Define proper transactions type
-  banks: any[]; // TODO: Define proper banks type
+  user: User | null; // TODO: Import User type from types
+  transactions: Transaction[]; // TODO: Import Transaction type from types
+  banks: Account[]; // TODO: Import Account type from types
 }
 
+/**
+ * RightSidebar component displays user profile and bank accounts
+ * @param user - User data object (null if not authenticated)
+ * @param transactions - Array of user transactions
+ * @param banks - Array of user's bank accounts
+ */
 const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
+  // TODO: Implement transactions display functionality
+  console.log('Transactions data:', transactions);
   // Don't render if user is null
   if (!user) {
     return null;
@@ -67,7 +75,7 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
           <div className="relative flex flex-1 flex-col items-center justify-center gap-5">
             <div className="relative z-10">
               <BankCard
-                key={banks[0].$id}
+                key={banks[0].id}
                 account={banks[0]}
                 userName={user.name}
                 showBalance={false}
@@ -76,7 +84,7 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
             {banks[1] && (
               <div className="absolute right-0 top-8 z-0 w-[90%]">
                 <BankCard
-                  key={banks[1].$id}
+                  key={banks[1].id}
                   account={banks[1]}
                   userName={user.name}
                   showBalance={false}

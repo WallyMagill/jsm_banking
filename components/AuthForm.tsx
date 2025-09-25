@@ -20,6 +20,7 @@ import { Form } from '@/components/ui/form';
 import CustomInput from './CustomInput';
 import { authFormSchema } from '@/lib/utils';
 import { signIn, signUp } from '@/lib/actions/user.actions';
+import PlaidLink from './PlaidLink';
 
 interface AuthFormProps {
   type: string;
@@ -117,7 +118,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
       </header>
       {user ? (
         <div className="flex flex-col gap-4">
-          {/* PlaidLink - Bank account linking functionality */}
+          <PlaidLink user={user} variant='primary' />
         </div>
       ) : (
         <>

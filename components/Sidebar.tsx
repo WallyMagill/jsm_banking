@@ -14,9 +14,13 @@ import { cn } from '@/lib/utils';
 import Footer from './Footer';
 
 interface SidebarProps {
-  user: any; // TODO: Define proper user type
+  user: User; // TODO: Import User type from types
 }
 
+/**
+ * Sidebar component provides desktop navigation menu
+ * @param user - User data object
+ */
 const Sidebar = ({ user }: SidebarProps) => {
   const pathname = usePathname();
 
@@ -68,7 +72,7 @@ const Sidebar = ({ user }: SidebarProps) => {
           );
         })}
 
-        {/* TODO: USER */}
+        {/* TODO: Add user profile section */}
       </nav>
       
       <Footer user={user} /> 

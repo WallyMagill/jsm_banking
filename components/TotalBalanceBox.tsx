@@ -6,11 +6,17 @@ import AnimatedCounter from './AnimatedCounter';
 import DoughnutChart from './DoughnutChart';
 
 interface TotalBalanceBoxProps {
-  accounts?: any[]; // TODO: Define proper account type
+  accounts?: Account[]; // TODO: Import Account type from types
   totalBanks: number;
   totalCurrentBalance: number;
 }
 
+/**
+ * TotalBalanceBox component displays user's total balance and account summary
+ * @param accounts - Array of user's bank accounts
+ * @param totalBanks - Total number of connected banks
+ * @param totalCurrentBalance - Total current balance across all accounts
+ */
 const TotalBalanceBox = ({
   accounts = [],
   totalBanks,

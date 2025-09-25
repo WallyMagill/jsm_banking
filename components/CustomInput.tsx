@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 // Utilities
 import { authFormSchema } from '@/lib/utils';
 
+// TODO: Make formSchema dynamic based on form type
 const formSchema = authFormSchema('sign-up');
 
 interface CustomInputProps {
@@ -28,6 +29,15 @@ interface CustomInputProps {
   className?: string;
 }
 
+/**
+ * CustomInput component provides a reusable form input with validation
+ * @param control - React Hook Form control object
+ * @param name - Field name for form validation
+ * @param label - Display label for the input
+ * @param placeholder - Placeholder text for the input
+ * @param type - Input type (text, password, email, etc.)
+ * @param className - Additional CSS classes
+ */
 const CustomInput = ({
   control,
   name,

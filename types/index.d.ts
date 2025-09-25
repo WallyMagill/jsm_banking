@@ -1,10 +1,16 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+// ========================================
+// Core Application Types
+// ========================================
 
 declare type SearchParamProps = {
   params: { [key: string]: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
+// ========================================
+// Authentication Types
 // ========================================
 
 declare type SignUpParams = {
@@ -54,6 +60,10 @@ declare type NewUserParams = {
   password: string;
 };
 
+// ========================================
+// Banking & Financial Types
+// ========================================
+
 declare type Account = {
   id: string;
   availableBalance: number;
@@ -80,7 +90,6 @@ declare type Transaction = {
   category: string;
   date: string;
   image: string;
-  type: string;
   $createdAt: string;
   channel: string;
   senderBankId: string;
@@ -98,13 +107,13 @@ declare type Bank = {
 };
 
 declare type AccountTypes =
-  | "depository"
-  | "credit"
-  | "loan "
-  | "investment"
-  | "other";
+  | 'depository'
+  | 'credit'
+  | 'loan'
+  | 'investment'
+  | 'other';
 
-declare type Category = "Food and Drink" | "Travel" | "Transfer";
+declare type Category = 'Food and Drink' | 'Travel' | 'Transfer';
 
 declare type CategoryCount = {
   name: string;
@@ -142,6 +151,10 @@ declare type NewDwollaCustomerParams = {
   ssn: string;
 };
 
+// ========================================
+// Component Props Interfaces
+// ========================================
+
 declare interface CreditCardProps {
   account: Account;
   userName: string;
@@ -151,11 +164,11 @@ declare interface CreditCardProps {
 declare interface BankInfoProps {
   account: Account;
   appwriteItemId?: string;
-  type: "full" | "card";
+  type: 'full' | 'card';
 }
 
 declare interface HeaderBoxProps {
-  type?: "title" | "greeting";
+  type?: 'title' | 'greeting';
   title: string;
   subtext: string;
   user?: string;
@@ -180,21 +193,12 @@ declare interface PaginationProps {
 
 declare interface PlaidLinkProps {
   user: User;
-  variant?: "primary" | "ghost";
+  variant?: 'primary' | 'ghost';
   dwollaCustomerId?: string;
 }
 
-// declare type User = sdk.Models.Document & {
-//   accountId: string;
-//   email: string;
-//   name: string;
-//   items: string[];
-//   accessToken: string;
-//   image: string;
-// };
-
 declare interface AuthFormProps {
-  type: "sign-in" | "sign-up";
+  type: 'sign-in' | 'sign-up';
 }
 
 declare interface BankDropdownProps {
@@ -261,7 +265,10 @@ declare interface PaymentTransferFormProps {
   accounts: Account[];
 }
 
-// Actions
+// ========================================
+// Action Function Props
+// ========================================
+
 declare interface getAccountsProps {
   userId: string;
 }

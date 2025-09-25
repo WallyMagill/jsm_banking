@@ -60,3 +60,5 @@ next-env.d.ts
 
 # misc
 *.pem
+# Sentry Config File
+.env.sentry-build-plugin

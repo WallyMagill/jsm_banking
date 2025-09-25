@@ -9,11 +9,17 @@ import Image from 'next/image';
 import { formatAmount } from '@/lib/utils';
 
 interface BankCardProps {
-  account: any; // TODO: Define proper account type
+  account: Account; // TODO: Import Account type from types
   userName: string;
   showBalance?: boolean;
 }
 
+/**
+ * BankCard component displays a bank account card with user information and balance
+ * @param account - Bank account data
+ * @param userName - Name of the account holder
+ * @param showBalance - Whether to display the account balance
+ */
 const BankCard = ({ account, userName, showBalance = true }: BankCardProps) => {
   return (
     <div className="flex flex-col">
@@ -74,7 +80,7 @@ const BankCard = ({ account, userName, showBalance = true }: BankCardProps) => {
         />
       </Link>
 
-      {/* TODO: COPY */}
+      {/* TODO: Add copy functionality for account details */}
     </div>
   );
 };

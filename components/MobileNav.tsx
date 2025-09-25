@@ -13,8 +13,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
@@ -25,9 +23,13 @@ import { cn } from '@/lib/utils';
 import Footer from './Footer';
 
 interface MobileNavProps {
-  user: any; // TODO: Define proper user type
+  user: User; // TODO: Import User type from types
 }
 
+/**
+ * MobileNav component provides mobile navigation with slide-out menu
+ * @param user - User data object
+ */
 const MobileNav = ({ user }: MobileNavProps) => {
   const pathname = usePathname();
 
@@ -97,11 +99,11 @@ const MobileNav = ({ user }: MobileNavProps) => {
                   );
                 })}
 
-                {/* TODO: USER */}
+                {/* TODO: Add user profile section */}
               </nav>
             </SheetClose>
 
-            <Footer user={user} type='mobile' />
+            <Footer user={user} type="mobile" />
           </div>
         </SheetContent>
       </Sheet>

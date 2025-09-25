@@ -1,8 +1,14 @@
 'use server';
 
+// External library imports
 import { Client, Account, Databases, Users } from 'node-appwrite';
 import { cookies } from 'next/headers';
 
+/**
+ * Creates an Appwrite client with user session authentication
+ * @returns Client with account access for authenticated users
+ * @throws Error if no valid session is found
+ */
 export async function createSessionClient() {
   const client = new Client()
     .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
@@ -22,6 +28,10 @@ export async function createSessionClient() {
   };
 }
 
+/**
+ * Creates an Appwrite client with admin privileges
+ * @returns Client with full access to account, database, and users
+ */
 export async function createAdminClient() {
   const client = new Client()
     .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
